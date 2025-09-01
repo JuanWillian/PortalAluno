@@ -15,16 +15,19 @@ import com.juan.classes.NotasAlunoHandler;
 public class Main {
 
 	public static void main(String[] args) {
-		Server server = new Server(8080);
+		Server server = new Server(9090);
 		ContextHandlerCollection handlers = new ContextHandlerCollection();
 		ContextHandler contextNotasAluno = new ContextHandler();
-		contextNotasAluno.setContextPath("/Aluno/");
+		//pesquisar como colocar o id como parametro
+		contextNotasAluno.setContextPath("/Aluno/notas");
 		contextNotasAluno.setHandler(new NotasAlunoHandler());
 		ContextHandler contextMediaAluno = new ContextHandler();
-		contextMediaAluno.setHandler(new MediaAlunoHandler())
+		contextMediaAluno.setContextPath("/Aluno/media");
+		contextMediaAluno.setHandler(new MediaAlunoHandler());
 		handlers.addHandler(contextNotasAluno);
 		handlers.addHandler(contextMediaAluno);
 		server.setHandler(handlers);
+		
 		try {
 			server.start();
 		} catch (Exception e) {
