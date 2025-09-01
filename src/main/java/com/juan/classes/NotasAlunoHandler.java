@@ -19,19 +19,21 @@ public class NotasAlunoHandler extends AbstractHandler{
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		System.out.println("entrou no handler");
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
 		String path = request.getRequestURI(); 
 		String[] partes = path.split("/");
 		String idAluno = partes.length > 3 ? partes[3] : null;
-		procurarNotasAluno(idAluno);
 		response.getWriter().print("HelloWorld");
+		Map<String, Double> map = procurarNotasAluno(idAluno);
+		response.getWriter().print(map.get(idAluno));
 		baseRequest.setHandled(true);
 	}
 	
-	public void procurarNotasAluno(String idAluno) {
+	public Map<String, Double> procurarNotasAluno(String idAluno) {
 		File file = new File(criarSubpastas()+File.separator+"notas.csv");
-		file.mkdirs();
+		if(file.mkdirs()) {
 		try(BufferedReader br = new BufferedReader(new FileReader(file))){
 			Map<String, Double> map = new HashMap<>();
 			String line = br.readLine();
@@ -42,11 +44,13 @@ public class NotasAlunoHandler extends AbstractHandler{
 					System.out.println(line);
 				}
 			line = br.readLine();
-			
+			return map;
 			}
 		}catch(IOException e) {
-			System.out.println();
-		}
+			System.out.println(e.getMessage());
+		}}
+		return null;
+	
 	}
 	
 	
